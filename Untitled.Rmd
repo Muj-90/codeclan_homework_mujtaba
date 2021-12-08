@@ -1,0 +1,189 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+books <- read_csv("books.csv")
+```
+
+```{r}
+names(books)
+```
+
+```{r}
+dim(books)
+```
+
+```{r}
+head(books)
+```
+
+```{r}
+library(CodeClanData)
+```
+
+```{r}
+glimpse(books)
+```
+
+now i would like to see if there any miss value
+
+```{r}
+sum(is.na(books))
+```
+
+
+
+
+i am happy now i dont have any missing value i will try to foun out  answeres for some qusition 
+
+
+```{r}
+books
+```
+
+
+
+
+
+```{r}
+select(books, rowid , bookID, title, authors  , ratings_count, language_code) 
+```
+
+```{r}
+filter(books, rowid != bookID)
+```
+
+
+
+```{r}
+filter(books, ratings_count > 15000)
+```
+
+```{r}
+filter(books, average_rating == 0)
+```
+
+```{r}
+arrange(books, title)
+```
+
+```{r}
+arrange(books, title, publication_date)
+```
+
+```{r}
+distinct(books, title, authors,average_rating )
+```
+```{r}
+books
+distinct(language_code) %>% 
+  nrow()
+  
+```
+
+
+```{r}
+arrange(books,desc(authors), desc(title))
+```
+
+```{r}
+books
+```
+
+
+```{r}
+select(books, rowid , bookID, title, authors  , ratings_count, language_code) 
+```
+
+
+
+```{r}
+books %>% 
+distinct(language_code) %>% 
+  nrow()
+  
+```
+
+```{r}
+books %>% 
+distinct(authors) %>% 
+  nrow()
+  
+```
+
+
+
+
+now i would like to see the top to and last books reating and rivews  
+
+
+
+```{r}
+books %>% 
+  slice_max(ratings_count)
+```
+
+
+```{r}
+books %>% 
+  slice_min(ratings_count)
+```
+
+
+```{r}
+books %>% 
+slice_tail(ratings_count)
+```
+
+```{r}
+books %>% 
+slice_min(text_reviews_count)
+```
+
+```{r}
+books %>% 
+slice_max(text_reviews_count)
+```
+here i try to see the max of pages number
+```{r}
+books %>% 
+  slice_max(num_pages)
+```
+now iam traying to see which writer has most books
+
+```{r}
+books
+  
+```
+
+```{r}
+books %>%  
+group_by(publisher) %>%
+  summarise(n_titles = n()) %>% 
+  arrange(desc(n_titles))
+ 
+```
+lts see the avrg of the 
+
+```{r}
+books %>% 
+  filter(ratings_count > 4000) %>% 
+  group_by(publisher) 
+  
+```
+
+
+```{r}
+books %>% 
+  filter(ratings_count > 4000) %>% 
+  group_by(publisher) %>% 
+    summarise(mean_rating = mean(average_rating)) %>%
+  arrange(desc(mean_rating))
+```
+

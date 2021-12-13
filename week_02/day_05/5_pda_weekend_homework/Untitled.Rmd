@@ -1,0 +1,68 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+library (stringr)
+```
+
+
+
+
+```{r}
+library(tidyr)
+```
+
+```{r}
+meteorite_landings <- read_csv("meteorite_landings.csv")
+```
+
+```{r}
+dim(meteorite_landings) 
+
+
+```
+
+```{r}
+sum(is.na(meteorite_landings)) 
+
+
+```
+
+```{r}
+names(meteorite_landings)
+```
+
+```{r}
+meteorite_landings %>% 
+  select(GeoLocation)
+```
+
+```{r}
+meteorite_landings %>% 
+  separate(GeoLocation, c("latitude ", "longitude"), " ") 
+```
+
+
+
+```{r}
+ meteorite_landings <- meteorite_landings %>% 
+ mutate(GeoLocation = gsub("[()]",'' , GeoLocation ))
+```
+
+```{r}
+
+meteorite_landings <- meteorite_landings %>% 
+  separate(GeoLocation, c("latitude ", "longitude"), " ") 
+```
+
+```{r}
+
+```
+

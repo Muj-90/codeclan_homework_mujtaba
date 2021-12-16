@@ -93,3 +93,15 @@ ON e.team_id = t.id
 GROUP BY t.id
 
 
+SELECT 
+  t.name,
+  COUNT(e.id) * CAST(t.charge_cost AS INT) AS total_day_charge
+FROM employees AS e
+INNER JOIN teams AS t
+ON e.team_id = t.id
+GROUP BY t.id
+HAVING COUNT(e.id) * CAST(t.charge_cost AS INT) > 5000
+
+SELECT 
+  COUNT(DISTINCT(employee_id)) AS num_employees_on_committees
+FROM employees_committees

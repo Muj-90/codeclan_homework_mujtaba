@@ -105,3 +105,77 @@ HAVING COUNT(e.id) * CAST(t.charge_cost AS INT) > 5000
 SELECT 
   COUNT(DISTINCT(employee_id)) AS num_employees_on_committees
 FROM employees_committees
+
+XPLAIN ANALYZE
+
+
+SELECT
+  department,
+    AVG(salary) AS avg_salary
+FROM employees 
+WHERE country IN ('Germany', 'France', 'Italy', 'Spain')
+GROUP BY department
+ORDER BY AVG(salary);
+
+
+
+SELECT *
+FROM employees
+WHERE country = 'United States' AND fte_hours IN (
+  SELECT fte_hours
+  FROM employees
+  GROUP BY fte_hours
+  HAVING COUNT(*) = (
+    SELECT MAX(count)
+    FROM (
+      SELECT COUNT(*) AS count
+      FROM employees
+      GROUP BY fte_hours
+    ) AS temp
+  )
+)
+
+
+
+
+WITH fte_count AS (
+    SELECT
+        fte_hours,
+        COUNT(*) AS count
+    FROM employees
+    GROUP BY fte_hours
+),
+max_fte_count AS (
+    SELECT 
+        MAX(count) AS max_count
+    FROM fte_count
+),
+most_common_fte AS (
+    SELECT
+        fte_hours
+    FROM fte_count 
+    WHERE count = (
+        SELECT 
+          max_count 
+        FROM max_fte_count
+    )
+)
+SELECT *
+FROM employees
+WHERE country = 'United States' AND fte_hours IN (
+    SELECT
+        fte_hours 
+    FROM most_common_fte
+)
+
+
+
+SELECT
+  first_name,
+  last_name,
+  department,
+  salary,
+  MIN(salary) OVER (PARTITION BY department) as min_sal_dept,
+  MAX(salary) OVER (PARTITION BY department) as max_sal_dept
+FROM employees
+ORDER BY id

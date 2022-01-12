@@ -1,0 +1,78 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+library(CodeClanData)
+```
+
+```{r}
+library(tidyverse)
+```
+#Load in the libraries you need, and look at the backpack data. Take note of variable names and dimensions.
+
+
+```{r}
+head(backpack)
+```
+```{r}
+names(backpack)
+```
+
+```{r}
+backpack<-backpack
+```
+
+#2 What is the distribution of backpack weights that students are carrying? Choose an appropriate graph to show the distribution.
+
+
+```{r}
+ggplot(backpack) +
+  aes(x = backpack_weight) +
+  geom_histogram(bins = 20, col = "white", fill = "red") + 
+  labs(y = " backpacks numb", x = "weight")
+```
+#the graph distribution of backpack weight
+
+```{r}
+labs(y = "number of backpacks", x = "weight")
+```
+#This graph  show distributions for backpack weights across males and females
+
+```{r}
+ ggplot(backpack) + aes(x = backpack_weight) + geom_histogram(bins = 15, col = "white", fill = "black") + labs(y = "number of backpacks", x = "weight")
+```
+
+```{r}
+ggplot(backpack) + 
+  aes(x = backpack_weight, fill = sex) + scale_fill_manual(values=c('#E89FE9', '#50434F')) +
+  
+  geom_histogram(bins = 15, col = "white") + 
+  labs(y = "numb of backpacks", x = "weight") + 
+  facet_wrap(~ sex) 
+```
+
+#q4
+#What is the relationship between body weight and backpack weight?
+```{r}
+ggplot(backpack) + 
+  aes(x = body_weight, y = backpack_weight) + geom_point() + labs(x = "body weight", y = "backpack weight") 
+
+```
+#relationship between body weight and backpack weight. 
+
+
+#q5 Is this relationship different between men and women? Choose an appropriate plot and interpret your findings.
+#different for males vs females? 
+
+
+```{r}
+
+ggplot(backpack) + 
+  aes(x = body_weight, y = backpack_weight, color = sex) + geom_col() + 
+  facet_wrap(~sex) + 
+  scale_color_manual(values=c('#E89FE9', '#50434F'))+ 
+  labs(x = "body weight", y = "backpack weight")
+
+```
+##different suggested  for males vs females

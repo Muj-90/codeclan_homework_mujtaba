@@ -1,0 +1,87 @@
+---
+title: "R Notebook"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r}
+library(prob)
+library(gtools)
+library(tidyverse)
+```
+
+```{r}
+library(janitor)
+```
+
+```{r}
+library(readr)
+titanic <- read_csv("titanic.csv")
+View(titanic)
+```
+
+```{r}
+head(titanic)
+```
+
+```{r}
+titanic %>%
+  count(class)
+```
+
+```{r}
+titanic <- titanic %>%
+ dplyr::mutate(crew = class %in% c("deck crew","engineering crew","restaurant staff", "victualling crew"))
+
+titanic %>%
+  count(crew)
+```
+
+
+```{r}
+titanic %>%
+  count(crew)
+```
+
+
+
+```{r}
+titanic%>%
+  filter(crew) %>%  
+  summarise(prob = sum(survived == "yes") / n())
+```
+
+
+```{r}
+titanic%>%
+  filter(!crew) %>%  
+  summarise(prob = sum(survived == "yes") / n())
+```
+#Q1 If I roll a six-sided dice once, what is the probability of getting a number less than 5?
+```{r}
+
+ssd <- rolldie(1)
+ssd_less_5 <- ssd %>%
+  filter(X1 < 5)
+
+head(ssd_less_5)
+```
+
+```{r}
+ssd <- rolldie(1)
+ssd_less_5 <- ssd %>%
+  filter(X1 < 5)
+
+
+ 
+prob <- nrow(ssd_less_5) / nrow(ssd)
+head(prob)
+```
+# How many outcomes are there in the sample space of an experiment in which we toss three dice?
+```{r}
+size_ssd <- 6 * 6 * 6
+head(size_ssd)
+```
+

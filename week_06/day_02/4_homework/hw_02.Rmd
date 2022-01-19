@@ -1,0 +1,74 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+ library(prob)
+library(gtools)
+library(tidyverse)
+library(janitor)
+```
+
+```{r}
+X20190928_items <- read_csv("data/20190928-items.csv")
+View(X20190928_items)
+clean_names(X20190928_items)
+```
+
+```{r}
+mobile_phone <- X20190928_items 
+clean_names(mobile_phone)
+```
+
+```{r}
+top_brand <- mobile_phone %>% 
+  group_by(brand)
+head(top_brand)
+```
+
+```{r}
+top_brand <- mobile_phone %>%
+  group_by(brand) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count)) 
+```
+
+```{r}
+top_brand
+  
+```
+#3 
+```{r}
+install.packages("MASS")
+```
+
+```{r}
+samsung_rait <- mobile_phone %>%
+  filter(brand == "Samsung") %>%
+  select(rating)
+head(samsung_rait)
+```
+
+```{r}
+samsung_rait <- mobile_phone%>%
+  filter(brand == "Samsung") %>%
+  summarise(count = n(),mean = mean(rating),sd = sd(rating)
+  )
+samsung_rait
+```
+
+```{r}
+samsung_rait%>%
+  ggplot(aes(x = rating)) +
+  geom_histogram(aes(y = ..density..), col = "white") +
+  stat_function(
+    fun = dnorm, 
+    args = list(
+      mean = samsung_rait$mean,
+      sd = samsung_rait$sd
+    ),
+    col = "red"
+  )
+```
+
+

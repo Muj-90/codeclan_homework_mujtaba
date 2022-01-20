@@ -1,0 +1,48 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+library(tidyverse)
+library(infer)
+library(janitor)
+```
+
+```{r}
+
+ames <- read_csv("data/ames.csv") %>% 
+  clean_names()
+```
+
+```{r}
+ames %>%
+  ggplot(aes(x = lot_area)) +
+  geom_histogram(col = "white")
+```
+#Compute and visualise a bootstrap sampling distribution for the mean(lot_area) of the sold houses.
+```{r}
+parameter <- ames %>% 
+  summarise(mean_lot_area = mean(lot_area))
+parameter
+```
+```{r}
+bootstrap_resample_200 <- parameter %>%
+  ggplot(aes(x = mean_lot_erea)) +
+  geom_histogram(col = "white") 
+
+```
+
+#q4
+```{r}
+ci_95 <- bootstrap_resample_200 %>%
+  summarise(
+    mean = mean(mean_lot_area),
+    bound = quantile (mean_lot_area, probs = 0.005),
+    
+  )
+
+ci_95
+```
+
+
+

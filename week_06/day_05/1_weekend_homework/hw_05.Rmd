@@ -1,0 +1,183 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+#1.1 Hypothesis testing - practical
+You work for an animal conservation organisation and are looking to do some investigating into some of the animals to provide evidence for some projects you are looking to run.
+
+In this homework we’ll use the msleep data set provided in the ggplot package. It concerns the sleeping patterns of various types of mammal.
+
+
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(infer)
+```
+
+```{r}
+data("msleep")
+head(msleep)
+```
+
+```{r}
+glimpse(msleep)
+```
+#Q2 Jabberwockies sleep for around 7 hours a night, on average. Perform an appropriate statistical test to determine whether the mean sleep_total in the sampled population of animal types differs from the typical value for jabberwockies.
+
+
+```{r}
+null_distribution <- msleep %>%
+  specify(response = sleep_total) %>%
+  
+  hypothesise(null = "point", mu = 7) %>%
+  generate(reps = 10000, type = "bootstrap") %>%
+  calculate(stat = "mean")
+
+```
+
+```{r}
+obs_stat <- msleep %>%
+  specify(response = sleep_total) %>%
+  calculate(stat = "mean")
+```
+
+```{r}
+null_distribution %>%
+  visualise() +
+  shade_pvalue (direction = "both", obs_stat = obs_stat)
+```
+
+```{r}
+null_distribution %>%
+  get_p_value(direction = "both", obs_stat = obs_stat)
+```
+#pvalue less than mean so we will reject H0 
+
+
+
+#Perform an appropriate statistical test to determine whether omnivores sleep for significantly longer than herbivores, on average.
+
+
+
+
+```{r}
+null_distribution <- msleep %>% 
+  filter(vore %in% c("omni", "herbi")) %>%
+  specify(sleep_total ~ vore) %>%
+  hypothesize(null = "independence") %>%
+  generate(reps = 10000, type = "permute") %>%
+  calculate(stat = "diff in means", order = c("omni", "herbi"))
+```
+
+```{r}
+obs_stat <- msleep %>%
+  filter(vore %in% c("omni", "herbi")) %>%
+  specify(sleep_total ~ vore) %>%
+  calculate(stat = "diff in means", order = c("omni", "herbi"))
+
+```
+
+```{r}
+null_distribution %>% 
+  visualise()+
+  shade_pvalue(direction = "right", obs_stat = obs_stat)
+```
+
+```{r}
+null_distribution %>%
+  get_p_value(direction = "right", obs_stat = obs_stat)
+```
+
+#p-value is equal to or greater than α
+, and so we fail to reject H0
+. There is insufficient evidence to conclude that omnivores sleep for significantly longer than herbivores on average.
+
+#Question 4. Perform an appropriate statistical test to determine whether the proportion of domesticated animal types in the population of animal types is greater than 5%
+. 
+ Hint
+Think about creating an is_domesticated variable for the analysis
+
+```{r}
+msleep %>% 
+  select(conservation)
+```
+
+```{r}
+mslep_domesticated <- msleep %>% 
+  mutate(is_domesticated = conservation == "domesticated") %>%
+  filter(!is.na(is_domesticated)) 
+
+```
+
+#null dis
+```{r}
+null_distribution <- mslep_domesticated %>%
+  specify(response = is_domesticated, success = "TRUE") %>%
+  hypothesize(null = "point", p = 0.05) %>%
+  generate(reps = 10000, type = "draw") %>%
+  calculate(stat = "prop")
+
+```
+#obs_stat
+
+
+```{r}
+obs_stat <- mslep_domesticated %>%
+  specify(response = is_domesticated, success = "TRUE") %>%
+  calculate(stat = "prop")
+
+```
+#visualise
+
+```{r}
+null_distribution %>%
+  visualise() +
+  shade_p_value(direction = "right", obs_stat = obs_stat)
+```
+
+```{r}
+null_distribution %>%
+   p_value(direction = "right", obs_stat = obs_stat)
+```
+
+#reject the p_value
+
+
+#nul
+
+
+
+
+
+#Hypothesis testing - Defining the Hypothesis
+#For the following three business problems write out:
+
+#What kind of test you would useH and Ha in both mathematical notation and in words.Also state the method you would use to generate the null distribution (bootstrap, permutation or simulation).
+
+
+#1.2.1 Question 1
+#You work for a independent coffee shop. The boss tells you that she thinks that around 40% of people in the town (population 30,000) know of the coffee shop, but you are skeptical of the estimate. You conduct a random survey of 200 people in the town, asking if respondents are aware of your coffee shop. You want to use the sample to test the hypothesis that 40% or more of the town’s population have heard of the coffee shop.
+
+#ANS 1
+
+
+
+One-sample prop
+
+H0
+:  40%
+ (or lower)
+Ha
+: the prop greater than 40%
+
+
+H0
+: awareness=0.4
+
+Ha
+: awareness>0.4
+
+Null distribution generation
+
+

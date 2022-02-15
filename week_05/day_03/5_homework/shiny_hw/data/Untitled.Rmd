@@ -1,0 +1,114 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+library(tidyverse)
+library(dplyr)
+```
+
+#1 Create a suitable plot for the following three datasets:
+
+late_deliveries
+recovery_times
+fitness_levels
+
+```{r}
+library(readr)
+late_deliveries <- read_csv("data/late_deliveries.csv")
+View(late_deliveries)
+```
+
+```{r}
+ggplot(late_deliveries) +
+ geom_line(aes(x = date, y = late_deliveries)) aes(x = date, y = late_deliveries) +
+  geom_line() + 
+  geom_point() + 
+  labs(x = "year", y = " late deliveries") + 
+
+```
+
+```{r}
+recovery_times<- read_csv("data/recovery_times.csv")
+View(recovery_times)
+```
+```{r}
+recovery_times <- recovery_times %>%
+  mutate(prognosis = fct_relevel(prognosis, "Poor", "Average", "Good", "Excellent"))
+```
+
+```{r}
+ggplot(recovery_times) +
+  aes(x = treatment_group, y = recovery, fill = prognosis) +
+  geom_col(position = "dodge") 
+```
+
+```{r}
+fitness_levels <- read_csv("data/fitness_levels.csv")
+view(fitness_levels)
+```
+
+```{r}
+fitness_levels %>%
+  group_by(group, age) %>% 
+  mutate(mean_score = mean(fitness_score)) %>% 
+
+
+ggplot() +
+  geom_line (aes(x = age, y = mean_score, group = group, colour = group)) 
+
+```
+geomline
+area
+col
+
+#connection
+
+```{r}
+blood_pressure <- read_csv("data/blood_pressure.csv")
+
+```
+
+```{r}
+ggplot(blood_pressure) +
+ geom_line(aes(x = daily_saturated_fat_intake_mg, y = systolic_blood_pressure_mm_hg)) +
+   labs(x = " fat intake ber day", y = " blood pressure by (mmHg)")
+```
+
+```{r}
+car_use <- read_csv("data/car_use.csv")
+view(car_use)
+names(car_use)
+```
+```{r}
+car_use %>% 
+summarise(
+  min_car_percent = min(car_use_percent),
+  max_car_percent = max(car_use_percent),
+  min_popul = min(population),
+  max_popul = max(population),
+  mutate(
+    population_satus = cut_number(x = population,
+                                 n = 4,
+  )
+)
+```
+```{r}
+
+```
+
+#Plot the following two datasets.
+
+d20_outcomes
+d20x5_outcomes
+
+```{r}
+d20_outcomes <- read_csv("data/d20_outcomes.csv")
+view(d20_outcomes)
+```
+
+```{r}
+ggplot(d20_outcomes) +
+ geom_(aes(x = outcome, bins = 10, col = "black"))
+```
+

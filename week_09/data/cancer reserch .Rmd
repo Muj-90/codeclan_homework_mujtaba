@@ -1,0 +1,115 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+ library(tidyverse)
+```
+
+```{r}
+library(janitor)
+```
+
+```{r}
+library(readr)
+cancer <- read_csv("e8d33b2b-1fb2-4d59-ad21-20fa2f76d9d5.csv") %>% 
+View(cancer)
+```
+
+```{r}
+ head(cancer)
+```
+
+```{r}
+library(readr)
+e8d33b2b_1fb2_4d59_ad21_20fa2f76d9d5 <- read_csv("e8d33b2b-1fb2-4d59-ad21-20fa2f76d9d5.csv")
+View(e8d33b2b_1fb2_4d59_ad21_20fa2f76d9d5)
+```
+
+```{r}
+ cancer_rec <- e8d33b2b_1fb2_4d59_ad21_20fa2f76d9d5
+```
+
+```{r}
+cancer_by_sex <- cancer_rec %>% 
+  select(Sex, CancerSite, Year)
+```
+
+```{r}
+ggplot(cancer_by_sex) +
+  geom_bar(aes(x = Sex))
+```
+
+```{r}
+
+cancer_by_year <- cancer_by_sex %>%
+  filter(Sex != "All")
+
+
+```
+
+```{r}
+year<- cancer_by_year %>% 
+  group_by(Year) %>% 
+  filter(CancerSite != "Leukaemias")
+```
+
+```{r}
+ggplot(cancer_by_year) +
+  aes(x = sex) +
+  geom_histogram(bins = 20, col = "white", fill = "dark green") + 
+  theme_light() + 
+  labs(y = "number of backpacks", x = "weight")
+```
+
+
+```{r}
+names(year)
+```
+
+```{r}
+```
+
+
+```{r}
+ggplot(year) +
+  aes(x = Sex) +
+  geom_bar(bins = 20, col = "white", fill = "dark green") + 
+  theme_light() + 
+  labs(y = "number case", x = "gender")
+```
+
+
+```{r}
+```
+```{r}
+ggplot(year) +
+  aes(x = Sex, fill = Year) +
+  scale_fill_manual(values=c('#E69F00', '#56B4E9')) +
+  geom_bar(bins = 20, col = "white", show.legend = FALSE) + 
+  theme_light() + 
+  labs(y = "number case", x = "weight") + 
+  facet_wrap(~ sex, nrow = 2)
+```
+
+```{r}
+year %>% 
+  select(Sex, CancerSite,Year) %>% 
+  group_by(Year == "2015", "2016", "2017", "2018", "2019")
+```
+
+```{r}
+year %>% 
+  select(Sex, CancerSite) 
+  
+```
+
+```{r}
+ggplot(year) +
+  aes(x = year) +
+  geom_bar(bins = 20, col = "white", fill = "dark green") + 
+  theme_light() + 
+  labs(y = "number case", x = "gender")
+```
+

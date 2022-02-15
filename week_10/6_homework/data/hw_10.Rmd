@@ -1,0 +1,62 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+#The file project_management.csv contains data sampled from the recent work schedule of a small construction company. Column estimated_length contains the estimated length of a building job in days, while column actual_length contains the actual recorded length of the job in days.
+
+#We are interested in determining the accuracy of the job estimations made by the company using simple linear regression, so we will eventually want to run a simple linear regression using actual_length as the dependent variable, and estimated_length as the independent variable.
+
+
+
+-------------------------------------------------------------------------- 
+```{r}
+library(tidyverse)
+```
+
+#Load the data into a dataframe project
+
+
+
+```{r}
+project <- read_csv("project_management.csv")
+```
+
+
+
+#Plot the data, taking estimated_length as the independent variable and actual_length as the dependent variable
+```{r}
+plot <- project %>% 
+  ggplot(aes(x = estimated_length, y = estimated_length)) +
+  ggplot(aes(x = estimated_length, y = estimated_length)) +
+  geom_point()
+```
+#Calculate the correlation coefficient of estimated_length and actual_length and interpret the value you obtain.
+
+
+```{r}
+project %>%
+  summarise(correlation_coefficient = cor(estimated_length, actual_length))
+```
+
+#Perform a simple linear regression using actual_length as the dependent variable, and estimated_length as the independent variable. Save the model object to a variable.
+
+```{r}
+model <- lm(data = project, actual_length ~ estimated_length)
+```
+
+#Interpret the regression coefficient of estimated_length (i.e. slope, gradient) you obtain from the model. How do you interpret the r2value reported by the model?
+```{r}
+
+  summarise(cor_squared = cor(actual_length, estimated_length)^2)
+```
+```{r}
+summary(model)
+```
+
+```{r}
+library(ggfortify)
+autoplot(model)
+```
+
+
+

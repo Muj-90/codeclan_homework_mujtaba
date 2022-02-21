@@ -1,0 +1,110 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(GGally)
+library(dplyr)
+```
+#Tidy up the data ready for regression:
+
+#* You might like to think about removing some or all of `date`, `id`, `sqft_living15`, `sqft_lot15` and `zipcode` (`lat` and `long` provide a better measure of location in any event).
+* Have a think about how to treat `waterfront`. Should we convert its type?
+* We converted `yr_renovated` into a `renovated` logical variable, indicating whether the property had ever been renovated. You may wish to do the same.
+* Have a think about how to treat `condition` and `grade`? Are they interval or categorical ordinal data types?
+```{r}
+ sale_house<- read_csv("kc_house_data.csv")
+```
+```{r}
+glimpse(sale_house)
+```
+
+```{r}
+library(GGally)
+```
+
+```{r}
+head(sale_house)
+```
+#Tidy up the data ready for regression:
+```{r}
+house_clean<- sale_house %>% 
+  select(-c("id", "date", "sqft_living15", "sqft_lot15", "zipcode"))
+```
+
+```{r}
+class(house_clean)
+glimpse(house_clean)
+```
+```{r}
+
+waterfront = as.logical(waterfront))
+```
+```{r}
+
+
+```
+```{r}
+house_clean %>% 
+mutate(waterfront= as.logical(waterfront)) %>% 
+  mutate(yr_renovated = yr_renovated >= 0)
+```
+
+#Check for aliased variables using the alias() function (this takes in a formula object and a data set). 
+[Hint - formula price ~ . says ‘price varying with all predictors’, this is a suitable input to alias()]. 
+Remove variables that lead to an alias. Check the ‘Elements of multiple regression’ lesson for a dropdown containing further information on finding aliased variables in a dataset.
+
+```{r}
+library(MASS)
+alias(price ~ ., data = house_clean)
+```
+
+#Remove variables that lead to an alias
+```{r}
+library(modelr)
+```
+
+```{r}
+  select(house_clean, -c("sqft_living"))
+house_clean
+```
+
+
+```{r}
+house_clean_numeric <- house_clean %>%
+  select_if(is.numeric)
+  
+```
+
+```{r}
+houses_clean_nonnumeric <- house_clean %>%
+  select_if(function(x) !is.numeric(x))
+
+houses_clean_nonnumeric$price <- house_clean$price
+
+```
+
+
+
+```{r}
+ggpairs(house_clean_numeric)
+
+```
+
+
+```{r}
+ggpairs(houses_clean_nonnumeric)
+```
+
+```{r}
+
+anova(houses_clean_numeric)
+```
+
+```{r}
+house_clean %>% 
+  ggplot(aes(x = ))
+```
+
